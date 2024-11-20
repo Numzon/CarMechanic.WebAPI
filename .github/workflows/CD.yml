@@ -42,7 +42,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.acurecr.io/${{ CONTAINER_APP_NAME }}:${{ github.sha }}
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.acurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
           file: CarMechanic.WebAPI/Dockerfile
 
       - name: Azure login
