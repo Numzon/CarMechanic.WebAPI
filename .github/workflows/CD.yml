@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 env:
-  AZURE_CONTAINER_REGISTRY: carmechanic
+  AZURE_CONTAINER_REGISTRY: carmechanicregistry
   CONTAINER_APP_NAME: carmechanic
   RESOURCE_GROUP: car-mechanic-dev
 
