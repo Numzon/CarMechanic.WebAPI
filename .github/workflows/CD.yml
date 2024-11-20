@@ -38,22 +38,25 @@ jobs:
           username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
           password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
       
-      - name: Build and push container image to ACR
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.acurecr.io/${{ env.CONTAINER_APP_NAME }}:latest
-          file: ./CarMechanic.WebAPI/Dockerfile
+      # - name: Build and push container image to ACR
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     push: true
+      #     tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.acurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+      #     file: ./CarMechanic.WebAPI/Dockerfile
+      - name: Build docker image
+        run: |
+          docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }} -f ./CarMechanic.WebAPI/Dockerfile .
 
       - name: Azure login
-        uses: azure/login@v2 
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Container Apps
         uses: azure/container-apps-deploy-action@v1
         with:
-          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:latest
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
           resourceGroup: ${{ env.RESOURCE_GROUP }}
           containerAppName: ${{ env.CONTAINER_APP_NAME }}
           environmentVariables: |
